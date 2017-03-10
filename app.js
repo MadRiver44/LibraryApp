@@ -6,6 +6,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+
 
 // we require our modules from our routes folder/directory
 // these modules handle ourroutes/url paths
@@ -14,6 +16,17 @@ var users = require('./routes/users');
 
 // last thing we do after requireing all our modules is create the express object
 var app = express();
+
+
+// use mongoose to connect to mongo
+mongoose.connect('mongodb://localhost:27017/test');
+// now with the above connection, we need to get notified if we connect successfully or if an error occurs
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error'));
+db.once('open', function() {
+  console.log('We\'re connected!!')
+});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
