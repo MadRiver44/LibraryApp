@@ -3,17 +3,17 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var AuthorSchema = Schema({
-  firstName: {type: String, required: true, max: 100},
-  lastName: {type: String, required: true, max: 100},
-  dateOfBirth: {type: Date},
-  dateOfDeath: {type: Date}
+  first_name: {type: String, required: true, max: 100},
+  family_name: {type: String, required: true, max: 100},
+  date_of_birth: {type: Date},
+  date_of_death: {type: Date}
 });
 
 // Virtual for author's full name
 
 AuthorSchema.virtual('name')
   .get(function() {
-    return '/catalog/author/' + ' , ' + this.firstName;
+    return this.family_name + ' , ' + this.first_name;
   });
 
 // Virtual for author's URL

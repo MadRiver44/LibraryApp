@@ -1,4 +1,4 @@
-var mogoose = require('mongoose');
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var BookInstanceSchema = Schema({
@@ -12,7 +12,7 @@ var BookInstanceSchema = Schema({
    "maintenance" and the Date to Date.now
   */
   status: {type: String, required: true, enum: ['Available', 'Maintenance','Loaned', 'Reserved'], default: 'Maintenance'},
-  due_back: [type: Date, default: Date.now]
+  due_back: {type: Date, default: Date.now}
 });
 
 // Virtual for bookintance's URL
