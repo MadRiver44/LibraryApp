@@ -9,10 +9,12 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
 
+
 // we require our modules from our routes folder/directory
 // these modules handle ourroutes/url paths
 var index = require('./routes/index');
 var users = require('./routes/users');
+var catalog = require('./routes/catalog') // import routes for catalog
 
 // last thing we do after requireing all our modules is create the express object
 var app = express();
@@ -45,6 +47,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //we add route handling code to request handling chain
 app.use('/', index); // look in index file (that we imported on line 12)
 app.use('/users', users); // look in index file (that we imported on line 13)
+app.use('/catalog', catalog); // Add catalog to middleware chain
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
