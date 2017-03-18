@@ -4,16 +4,39 @@ then we export  the functions for each of the URLs that we wish to handle
 */
 
 var Author = require('../models/author');
+var Book = require('../models/book');
+var async = require('async');
 
 // Display list of all authors
 exports.author_list = function(req, res, next) {
-  res.send("NOT IMPLEMENTED: Author list");
-};
+  Author.find()
+    .sort([['family_name', 'ascending']])
+    .exec(function(err, list_authors) {
+      if(err) {
+        return next(err);
+      }// Successful so render
+      res.render('author_list', {title: 'Author List', author_list: list_authors });
+    });
+  };
 
 // Display detail page for a specific Author
 exports.author_detail = function(req, res, next) {
-  res.send("NOT IMPLEMENTED: Author detail: " + req.params.id);
-} ;
+  async.parallel({
+    author: function(callback) {
+      Author.findById(req.params.id)
+        .exec(callback);
+    },
+    authors_books: function(callback) {
+      Book.find({'author': req.params.id} , 'title summary')
+      .exec(callback);
+    },
+  }, function(err, results) {
+    if(err) {
+      return next(err);
+    } //Successful so render
+    res.render('author_detail', {title: 'Author Detail', author: results.author, author_books: results.authors_books })
+  });
+};
 
 // Display Author create form on Get
 exports.author_create_get = function(req, res, next) {
@@ -36,7 +59,7 @@ exports.author_delete_post = function(req, res, next) {
 };
 
 // Display Author update form on GET
-exports.author_update_get = function(req, res next) {
+exports.author_update_get = function(req, res, next) {
   res.send("NOT IMPLEMENTED: Author update GET");
 };
 

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var moment = require('moment');
 
 var BookInstanceSchema = Schema({
   // reference to associated book
@@ -19,6 +20,11 @@ var BookInstanceSchema = Schema({
 BookInstanceSchema.virtual('url')
   .get(function() {
     return '/catalog/bookinstance/' + this._id;
+  });
+
+BookInstanceSchema.virtual('due_back_formatted')
+  .get(function() {
+    return moment(this.due_back).format('MMM Do, YYYY');
   });
 
 module.exports = mongoose.model('BookInstance', BookInstanceSchema);

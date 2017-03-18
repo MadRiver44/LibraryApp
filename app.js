@@ -32,7 +32,7 @@ db.once('open', function() {
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 
 
 // Now we set up our middleware libraries to the request handling chain
