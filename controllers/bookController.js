@@ -336,11 +336,11 @@ exports.book_update_post = function(req, res, next) {
     });
   } else {
     // Data from form is valid. Update the record
-    Book.findByIdAndUpdate(req.params.id, book, {}, function(err, book) {
+    Book.findByIdAndUpdate(req.params.id, book, {}, function(err, the_book) {
       if(err) {
         return next(err);
       }// Success so redirect to book detail page
-      res.redirect(book.url);
+      res.redirect(the_book.url);
     });
   }
 };

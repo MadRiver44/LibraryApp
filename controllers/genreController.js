@@ -158,11 +158,11 @@ exports.genre_update_get = function(req, res, next) {
     return;
   } else {
     // Data from form is valid, Update the record
-    Genre.findByIdAndUpdate(req.params.id, {}, function(err, genre) {
+    Genre.findByIdAndUpdate(req.params.id, {}, function(err, the_genre) {
       if(err) {
         return next(err);
       }// Success so redirect to genre detail page
-      res.reidrect('genre.url');
+      res.reidrect('the_genre.url');
     });
   }
 };
