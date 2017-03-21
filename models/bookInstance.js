@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 var moment = require('moment');
+var Schema = mongoose.Schema;
 
 var BookInstanceSchema = Schema({
   // reference to associated book

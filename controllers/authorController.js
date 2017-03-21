@@ -109,7 +109,7 @@ exports.author_delete_get = function(req, res, next) {
       if(err) {
         return next(err);
       }// Successful so render
-      res.render('author_delete', { title: 'Delete Author', author: results.author, author_books: reaults.authors_books});
+      res.render('author_delete', { title: 'Delete Author', author: results.author, author_books: results.authors_books});
   });
 };
 
@@ -122,12 +122,13 @@ exports.author_delete_post = function(req, res, next) {
   */
   req.checkBody('authorid', 'Author id must exist').notEmpty();
 
+
   async.parallel({
     author: function(callback) {
       Author.findById(req.params.authorid)
         .exec(callback);
     },
-    author_books: function(callback) {
+    authors_books: function(callback) {
       Book.find({'author': req.body.authorid }, 'title summary')
         .exec(callback);
     },
