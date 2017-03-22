@@ -107,14 +107,14 @@ req.checkBody('id', 'Id must not be empty.').notEmpty();
   console.log(req.body.id);
   // BookInstance id is valid
   console.log(req.params.id);
-
-  // BOOK INSTANCE IS GETTING DELETED(with req.params.id) BUT STIL GETING A 404 ON REDIRECT
+  // bookinstance delete does not work with req.body.id but does work
+  // with req.params.id
   BookInstance.findByIdAndRemove(req.params.id, function deleteBookInstance(err) {
     if(err) {
       console.log('error here')
       return next(err);
     }// Success so redirect
-    res.redirect('catalog/bookinstances');
+    res.redirect('/catalog/bookinstances');
   });
 };
 
