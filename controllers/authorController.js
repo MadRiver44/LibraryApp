@@ -11,10 +11,14 @@ var async = require('async');
 exports.author_list = function(req, res, next) {
   Author.find()
     .sort([['family_name', 'ascending']])
-    .exec(function(err, list_authors) {
+    .exec(function(err, list_authors) { // err results are the args
       if(err) {
         return next(err);
       }// Successful so render
+      /*
+      console.log(list_authors); -- our results, list_authors is an object that we iterate
+      over in view author_list
+      */
       res.render('author_list', {title: 'Author List', author_list: list_authors });
     });
   };

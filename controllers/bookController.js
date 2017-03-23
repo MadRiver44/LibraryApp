@@ -14,6 +14,10 @@ exports.index = function(req, res, next) {
     with results passed as an object of the functions results.
   */
 
+  /*
+    Another reason why we use async parallel is that we are querying different models
+    and we dont know how long each one will take to return
+  */
   async.parallel({
     book_count: function(callback) {
       Book.count(callback);
@@ -33,14 +37,16 @@ exports.index = function(req, res, next) {
   }, function(err, results) {
       // we specify outr view-- index.pug , title, error are vsriable thar=t are passed to the template
       // data is supplied as key: value pairs
+      //console.log(results) -- is an object with the above properties and values are the individual results;
       res.render('index', {title: 'Local Library Home', error: err, data: results });
+
   });
 };
 
 // Display a list of all books
 exports.book_list = function(req, res, next) {
   /* we use the models find() metod to return all book objects, selecting to return
-    only TITLE and AUTHOR(LINE 47). It will also return the _id and virtual fields.
+    only TITLE and AUTHOR(LINE 53). It will also return the _id and virtual fields.
     we call populate on Book specifying the author field -- this will replace the
     stored author id with full author details.
   */
@@ -68,12 +74,11 @@ exports.book_detail = function(req, res, next) {
   // are an array formed in the book obkect and accessed in the final results callback below
   async.parallel({
     book: function(callback) {
-      console.log(callback);
       Book.findById(req.params.id)
     // populate the author and genre id columns with associated info from Author and Genre Models
         .populate('author')
         .populate('genre')
-        .exec(callback)
+        .exec(callback) // his callback yields results object
     },
     book_instance: function(callback) {
       BookInstance.find({ 'book': req.params.id })
