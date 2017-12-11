@@ -21,7 +21,8 @@ app.use(helmet());
 
 // use mongoose to connect to mongo
 var mongoose = require('mongoose');
-var mongoDB = process.env.MONGODB_URI || 'mongodb://localhost:27017/test';
+var dev_db_url = 'mongodb://the_library_app:node996@ds135966.mlab.com:35966/library_app';
+var mongoDB = process.env.MONGODB_URI || dev_db_url;
 
 mongoose.connect(mongoDB, {
   useMongoClient: true,
@@ -30,9 +31,9 @@ mongoose.Promise = global.Promise;
 // now with the above connection, we need to get notified if we connect successfully or if an error occurs
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error'));
-db.once('open', function() {
-  console.log("We're connected!!");
-});
+//db.once('open', function() {
+//console.log("We're connected!!");
+//});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
