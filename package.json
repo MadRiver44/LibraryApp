@@ -1,6 +1,9 @@
 {
   "name": "library",
   "version": "0.0.0",
+  "engines": {
+    "node": "8.9.3"
+  },
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
@@ -9,11 +12,13 @@
   "dependencies": {
     "async": "^2.1.5",
     "body-parser": "~1.16.0",
+    "compression": "^1.7.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.0",
     "ejs": "~2.5.5",
     "express": "~4.14.1",
     "express-validator": "^3.1.2",
+    "helmet": "^3.9.0",
     "moment": "^2.17.1",
     "mongoose": "^4.8.6",
     "morgan": "~1.7.0",

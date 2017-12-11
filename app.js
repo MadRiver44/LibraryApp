@@ -1,4 +1,3 @@
-
 // we require our node modules
 var express = require('express');
 var path = require('path');
@@ -6,35 +5,38 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
 var expressValidator = require('express-validator');
-
-
 
 // we require our modules from our routes folder/directory
 // these modules handle ourroutes/url paths
 var index = require('./routes/index');
 var users = require('./routes/users');
-var catalog = require('./routes/catalog') // import routes for catalog
+var catalog = require('./routes/catalog'); // import routes for catalog
+var compression = require('compression');
+var helmet = require('helmet');
 
 // last thing we do after requireing all our modules is create the express object
 var app = express();
-
+app.use(helmet());
 
 // use mongoose to connect to mongo
-mongoose.connect('mongodb://localhost:27017/test');
+var mongoose = require('mongoose');
+var mongoDB = process.env.MONGODB_URI || 'mongodb://localhost:27017/test';
+
+mongoose.connect(mongoDB, {
+  useMongoClient: true,
+});
+mongoose.Promise = global.Promise;
 // now with the above connection, we need to get notified if we connect successfully or if an error occurs
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error'));
+db.on('error', console.error.bind(console, 'MongoDB connection error'));
 db.once('open', function() {
-  console.log('We\'re connected!!')
+  console.log("We're connected!!");
 });
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
 
 // Now we set up our middleware libraries to the request handling chain
 // uncomment after placing your favicon in /public
@@ -42,15 +44,15 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(expressValidator());//expressValidator uses the bodyParser middlewre to access parameters, must be right after bP
+app.use(expressValidator()); //expressValidator uses the bodyParser middlewre to access parameters, must be right after bP
 app.use(cookieParser());
+app.use(compression()); // compress all routes;
 app.use(express.static(path.join(__dirname, 'public')));
 
 //we add route handling code to request handling chain
 app.use('/', index); // look in index file (that we imported on line 12)
 app.use('/users', users); // look in index file (that we imported on line 13)
 app.use('/catalog', catalog); // Add catalog to middleware chain
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
