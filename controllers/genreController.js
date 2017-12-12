@@ -158,7 +158,7 @@ exports.genre_update_get = function(req, res, next) {
   req.sanitize('name').trim();
 
   // Run the validators
-  var errors = validationErrors();
+  var errors = req.validationErrors();
   // Create a new object eith the trimmed and escaped data and the old id
   var genre = new Genre({
     name: req.body.name,
