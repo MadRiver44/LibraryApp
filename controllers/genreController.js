@@ -155,7 +155,7 @@ exports.genre_update_get = function(req, res, next) {
   req.sanitize('id').escape();
   req.sanitize('id').trim();
   req.sanitize('name').escape();
-  req.sanitze('name').trim();
+  req.sanitize('name').trim();
 
   // Run the validators
   var errors = validationErrors();
