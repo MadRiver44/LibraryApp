@@ -174,12 +174,42 @@ exports.genre_update_get = function(req, res, next) {
       if (err) {
         return next(err);
       } // Success so redirect to genre detail page
-      res.reidrect(the_genre.url);
+      res.redrect(the_genre.url);
     });
   }
 };
 
-// Handle Genre update on POST
-exports.genre_update_post = function(req, res, next) {
-  res.send('NOT IMPLEMENTED: genre update POST');
-};
+// // Handle Genre update on POST
+// exports.genre_update_post = function(req, res, next) {
+//   req.sanitize('id').escape();
+//   req.sanitize('id').trim();
+//   //Check that the name field is not empty
+//   req.checkBody('name', 'Genre name required').notEmpty();
+//   //Trim and escape the name field.
+//   req.sanitize('name').escape();
+//   req.sanitize('name').trim();
+
+//   //Run the validators
+//   var errors = req.validationErrors();
+
+//   //Create a genre object with escaped and trimmed data (and the old id!)
+//   var genre = new Genre({
+//     name: req.body.name,
+//     _id: req.params.id,
+//   });
+
+//   if (errors) {
+//     //If there are errors render the form again, passing the previously entered values and errors
+//     res.render('genre_form', { title: 'Update Genre', genre: genre, errors: errors });
+//     return;
+//   } else {
+//     // Data from form is valid. Update the record.
+//     Genre.findByIdAndUpdate(req.params.id, genre, {}, function(err, the_genre) {
+//       if (err) {
+//         return next(err);
+//       }
+//       //successful - redirect to genre detail page.
+//       res.redirect(the_genre.url);
+//     });
+//   }
+// };
