@@ -58,7 +58,7 @@ exports.author_create_get = function(req, res, next) {
 exports.author_create_post = function(req, res, next) {
   req.checkBody('first_name', 'First name must be specified.').notEmpty(); //alphanumeric not enforced, people may have spaces
   req.checkBody('family_name', 'Family name nust be specified.').notEmpty();
-  req.checkBody('family_name', 'Family name must be alphanumerci text.').isAlpha();
+  req.checkBody('family_name', 'Family name must be alphanumerci text.').isAlphanumeric();
   /* optional() is a susbsequent validation only if the field has been entered
      i.e. we check that the optional dob is a date. checkFalsy flag means that we'll
     accept either an empty string or null as an empty value
@@ -66,11 +66,11 @@ exports.author_create_post = function(req, res, next) {
   req
     .checkBody('date_of_birth', 'Invalid date')
     .optional({ checkFalsy: true })
-    .isDate();
+    .isISO8061();
   req
     .checkBody('date_of_death', 'Invalid date')
     .optional({ checkFalsy: true })
-    .isDate();
+    .isISO8061();
 
   req.sanitize('first_name').escape();
   req.sanitize('family_name').escape();
@@ -79,10 +79,10 @@ exports.author_create_post = function(req, res, next) {
   /* parameters are recieved from the request as strings. we can use toDate() OR
      toBoolean() to cast these as proper javascript types
   */
+  var errors = req.validationErrors();
   req.sanitize('date_of_birth').toDate();
   req.sanitize('date_of_death').toDate();
 
-  var errors = req.validationErrors();
   // All good? create a new Author instance
   var author = new Author({
     first_name: req.body.first_name,
@@ -149,14 +149,14 @@ exports.author_delete_post = function(req, res, next) {
         Author.findById(req.params.authorid).exec(callback);
       },
       authors_books: function(callback) {
-        Book.find({ author: req.body.authorid }, 'title summary').exec(callback);
+        Book.find({ author: req.body.authorid }).exec(callback);
       },
     },
     function(err, results) {
       if (err) {
         return next(err);
       } // Success so render
-      if (results.authors_books > 0) {
+      if (results.authors_books.length > 0) {
         // Author has books so render in the same way as GET route
         res.render('author_delete', {
           title: 'Delete Author',
@@ -178,6 +178,9 @@ exports.author_delete_post = function(req, res, next) {
 
 // Display Author update form on GET
 exports.author_update_get = function(req, res, next) {
+  req.sanitize('id').escape();
+  req.sanitize('id').trim();
+
   Author.findById(req.params.id, function(err, the_author) {
     if (err) {
       return next(err);
@@ -190,26 +193,26 @@ exports.author_update_get = function(req, res, next) {
 exports.author_update_post = function(req, res, next) {
   req.checkBody('first_name', 'First name must be specified.').notEmpty();
   req.checkBody('family_name', 'Family name must be specified.').notEmpty();
-  req.checkBody('family_name', 'Family name must be alphanumeric text.').isAlpha();
+  req.checkBody('family_name', 'Family name must be alphanumeric text.').isAlphanumeric();
   req
     .checkBody('date_of_birth', 'Invalid date')
     .optional({ checkFalsy: true })
-    .isDate();
+    .isISO8061();
   req
     .checkBody('date_of_death', 'Invalid date')
     .optional({ checkFalsy: true })
-    .isDate();
+    .isISO8061();
   req.sanitize('first_name').escape();
   req.sanitize('family_name').escape();
   req.sanitize('id').escape();
   req.sanitize('id').trim();
   req.sanitize('first_name').trim();
   req.sanitize('family_name').trim();
-  req.sanitize('date_of_birth').toDate();
-  req.sanitize('date_of_death').toDate();
 
   // Run the validators
   var errors = req.validationErrors();
+  req.sanitize('date_of_birth').toDate();
+  req.sanitize('date_of_death').toDate();
 
   // Create a new author onject with escaped and trimmed data and the old id
   var author = new Author({
