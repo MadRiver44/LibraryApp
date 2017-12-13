@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 // Require all Controllers
- var book_controller = require('../controllers/bookController');
- var author_controller = require('../controllers/authorController');
- var genre_controller = require('../controllers/genreController');
- var book_instance_controller = require('../controllers/bookinstanceController');
+var book_controller = require('../controllers/bookController');
+var author_controller = require('../controllers/authorController');
+var genre_controller = require('../controllers/genreController');
+var book_instance_controller = require('../controllers/bookinstanceController');
 
 // BOOK ROUTES
 
@@ -35,7 +35,6 @@ router.get('/book/:id', book_controller.book_detail);
 
 /* GET request for a list of all book items */
 router.get('/books', book_controller.book_list);
-
 
 // AUTHOR ROUTES
 
@@ -89,7 +88,6 @@ router.get('/genre/:id', genre_controller.genre_detail);
 /* GET request for list of all Genres */
 router.get('/genres', genre_controller.genre_list);
 
-
 // BOOKINSTANCE ROUTES
 
 /* GET request for creating a BookInstance. NOTE, this must come before route that displays BookInstance (uses id) */
@@ -117,10 +115,3 @@ router.get('/bookinstance/:id', book_instance_controller.bookinstance_detail);
 router.get('/bookinstances', book_instance_controller.bookinstance_list);
 
 module.exports = router;
-
-
-
-
-
-
-
